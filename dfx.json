@@ -1,0 +1,13 @@
+{
+    "canisters": {
+        "ts-spillover": {
+            "type": "custom",
+            "main": "src/index.ts",
+            "candid": "src/index.did",
+            "build": "npx azle ts-spillover",
+            "wasm": ".azle/ts-spillover/ts-spillover.wasm",
+            "gzip": true
+        }
+    }
+}
+
