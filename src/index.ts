@@ -38,16 +38,31 @@ export function getReview(id: string): Result<Review, string> {
 // Add a new review
 $update
 export function addReview(payload: ReviewPayload): Result<Review, string> {
+    // Validate input
+    if (!payload.body || !payload.rating || !payload.websiteURL) {
+        return Result.Err('Invalid input');
+    }
+
     const id = uuidv4();
     const createdAt = ic.time();
     const review: Review = { id, createdAt, updatedAt: Opt.None, ...payload };
     reviewStorage.insert(id, review);
-    return Result.Ok(review);
+    // Check if the review was added successfully
+    if (reviewStorage.get(id) !== null) {
+        return Result.Ok(review);
+    } else {
+        return Result.Err('Failed to add review');
+    }
 }
 
 // Update an existing review by ID
 $update
 export function updateReview(id: string, payload: ReviewPayload): Result<Review, string> {
+    // Validate input
+    if (!payload.body || !payload.rating || !payload.websiteURL) {
+        return Result.Err('Invalid input');
+    }
+
     const existingReview = reviewStorage.get(id);
     if (existingReview !== null) {
         const updatedAt = Opt.Some(ic.time());
