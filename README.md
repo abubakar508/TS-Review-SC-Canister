@@ -1,47 +1,86 @@
-# ts-spillover
+## Review Smart Contract
 
-Welcome to your first Azle project! This example project will help you to deploy your first canister (application) to the Internet Computer (IC) decentralized cloud. It is a simple getter/setter canister. You can always refer to [The Azle Book](https://demergent-labs.github.io/azle/) for more in-depth documentation.
+This repository contains a smart contract built using the Azle framework, managing a collection of reviews. The smart contract is written in TypeScript and utilizes features provided by Azle for storage and query operations.
+Table of Contents
 
-`dfx` is the tool you will use to interact with the IC locally and on mainnet. If you don't already have it installed:
+    # Overview
+    Types
+    Functions
+        getReviews
+        getReview
+        addReview
+        updateReview
+    Storage
+        reviewStorage
+    Usage
+    Installation
+    Contributing
+    License
 
-```bash
-npm run dfx_install
-```
+Overview
 
-Next you will want to start a replica, which is a local instance of the IC that you can deploy your canisters to:
+This smart contract provides functionality to manage reviews, including retrieving a list of all reviews, fetching a specific review by its unique identifier, adding a new review, and updating an existing review.
+Types
+Review
 
-```bash
-npm run replica_start
-```
+    id: Unique identifier for each review.
+    body: Text content of the review.
+    rating: Numeric value representing the rating assigned to the review.
+    websiteURL: URL associated with the reviewed item.
+    createdAt: Timestamp indicating the creation time of the review.
+    updatedAt: Optional timestamp indicating the last update time of the review.
 
-If you ever want to stop the replica:
+ReviewPayload
 
-```bash
-npm run replica_stop
-```
+    body: Text content of the review.
+    rating: Numeric value representing the rating assigned to the review.
+    websiteURL: URL associated with the reviewed item.
 
-Now you can deploy your canister locally:
+Functions
+getReviews
 
-```bash
-npm install
-npm run canister_deploy_local
-```
+typescript
 
-To call the methods on your canister:
+export function getReviews(): Result<Vec<Review>, string>
 
-```bash
-npm run canister_call_get_message
-npm run canister_call_set_message
-```
+    Description: Retrieves a list of all reviews stored in the smart contract.
+    Returns: A Result containing a Vec<Review> on success or an error message on failure.
 
-If you run the above commands and then call `npm run canister_call_get_message` you should see:
+getReview
 
-```bash
-("Hello world!")
-```
+typescript
 
-Assuming you have [created a cycles wallet](https://internetcomputer.org/docs/current/developer-docs/quickstart/network-quickstart) and funded it with cycles, you can deploy to mainnet like this:
+export function getReview(id: string): Result<Review, string>
 
-```bash
-npm run canister_deploy_mainnet
-```
+    Parameters:
+        id (string): Unique identifier of the review to retrieve.
+    Description: Retrieves a specific review by its unique identifier.
+    Returns: A Result containing the requested Review on success or an error message if the review is not found.
+
+addReview
+
+typescript
+
+export function addReview(payload: ReviewPayload): Result<Review, string>
+
+    Parameters:
+        payload (ReviewPayload): Data required to create a new review.
+    Description: Adds a new review to the storage.
+    Returns: A Result containing the newly created Review on success or an error message on failure.
+
+updateReview
+
+typescript
+
+export function updateReview(id: string, payload: ReviewPayload): Result<Review, string>
+
+    Parameters:
+        id (string): Unique identifier of the review to update.
+        payload (ReviewPayload): Data to update in the existing review.
+    Description: Updates an existing review with the provided data.
+    Returns: A Result containing the updated Review on success or an error message if the review is not found.
+
+Storage
+reviewStorage
+
+    Type: StableBTreeMap<string, Review>
